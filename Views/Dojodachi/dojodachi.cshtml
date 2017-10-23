@@ -1,0 +1,18 @@
+@{
+    ViewData["Title"] = "Dojodachi!";
+}
+<body>
+    <ul>
+    @{
+        var KVList = new List<KeyValuePair<string, int>>();
+            KVList.Add(new KeyValuePair<string, int>("Fullness", 70));
+            KVList.Add(new KeyValuePair<string, int>("Happiness", 45));
+            KVList.Add(new KeyValuePair<string, int>("Meals", 3));
+            KVList.Add(new KeyValuePair<string, int>("Energy", 85));
+        foreach(var pair in KVList)
+        {
+            <li>@pair.Key: @pair.Value</li>
+        }
+    }
+    </ul>
+</body>
