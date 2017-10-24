@@ -1,18 +1,37 @@
 @{
     ViewData["Title"] = "Dojodachi!";
 }
-<body>
-    <ul>
-    @{
-        var KVList = new List<KeyValuePair<string, int>>();
-            KVList.Add(new KeyValuePair<string, int>("Fullness", 70));
-            KVList.Add(new KeyValuePair<string, int>("Happiness", 45));
-            KVList.Add(new KeyValuePair<string, int>("Meals", 3));
-            KVList.Add(new KeyValuePair<string, int>("Energy", 85));
-        foreach(var pair in KVList)
-        {
-            <li>@pair.Key: @pair.Value</li>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="~/css/style.css">
+    </head>
+    <body>
+        <ul>
+        @{
+            var KVList = new List<KeyValuePair<string, int>>();
+                KVList.Add(new KeyValuePair<string, int>("Fullness", 70));
+                KVList.Add(new KeyValuePair<string, int>("Happiness", 45));
+                KVList.Add(new KeyValuePair<string, int>("Meals", 3));
+                KVList.Add(new KeyValuePair<string, int>("Energy", 85));
+            foreach(var pair in KVList)
+            {
+                <li>@pair.Key: @pair.Value</li>
+            }
         }
-    }
-    </ul>
-</body>
+        </ul>
+        <div>
+            <img src="~/images/mutant-ninja-slug.jpg" alt="Mutant Ninja Slug">
+            @{
+                string message = "This is the placeholder message";
+                <p>@message</p>
+            }
+        </div>
+    </body>
+    <form action="move" method="POST">
+        <input type="submit" name="result" value="Feed">
+        <input type="submit" name="result" value="Play">
+        <input type="submit" name="result" value="Work">
+        <input type="submit" name="result" value="Sleep">
+    </form>
+</html>
