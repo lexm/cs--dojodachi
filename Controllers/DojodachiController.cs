@@ -14,28 +14,19 @@ namespace dojodachi.Controllers
         [Route("")]
         public IActionResult Dojodachi()
         {
-            if(HttpContext.Session.GetInt32("happiness") == null)
+            if(HttpContext.Session.GetString("message") == null)
             {
                 HttpContext.Session.SetInt32("fullness", 20);
                 HttpContext.Session.SetInt32("happiness", 20);
                 HttpContext.Session.SetInt32("meals", 3);
                 HttpContext.Session.SetInt32("energy", 50);
+                HttpContext.Session.SetString("message", "Welcome to DojoDachi!");
             }
                 ViewBag.fullness = HttpContext.Session.GetInt32("fullness");
                 ViewBag.happiness = HttpContext.Session.GetInt32("happiness");
                 ViewBag.meals = HttpContext.Session.GetInt32("meals");
                 ViewBag.energy = HttpContext.Session.GetInt32("energy");
-            // if(TempData["happiness"] == null)
-            // {
-            //     TempData["fullness"] = 20;
-            //     TempData["happiness"] = 20;
-            //     TempData["meals"] = 3;
-            //     TempData["energy"] = 50;
-            // }
-            //     ViewBag.fullness = TempData["fullness"];
-            //     ViewBag.happiness = TempData["happiness"];
-            //     ViewBag.meals = TempData["meals"];
-            //     ViewBag.energy = TempData["energy"];
+                ViewBag.message = HttpContext.Session.GetString("message");
             return View("dojodachi", ViewBag);
         }
 
@@ -47,6 +38,10 @@ namespace dojodachi.Controllers
             int? happInt = HttpContext.Session.GetInt32("happiness");
             int? mealInt = HttpContext.Session.GetInt32("meals");
             int? enerInt = HttpContext.Session.GetInt32("energy");
+            int fuller = 0;
+            int happier = 0;
+            int mealier = 0;
+            string message = "This is the test message";
             System.Console.WriteLine("{0} {1} {2} {3}", fullInt, happInt, mealInt, enerInt);
             if(result == "Feed")
             {
@@ -55,8 +50,14 @@ namespace dojodachi.Controllers
                     bool like = randy.Next(0, 4) != 0;
                     if(like)
                     {
-                        fullInt += randy.Next(5,11);
+                        fuller = randy.Next(5, 11);
+                        message = "You fed your DojoDachi! Fullness +" + fuller + ", Meals -1";
                     }
+                    else
+                    {
+                        message = "You tried to feed your Dojodachi, but it didn't like it. Meals -1";
+                    }
+                    fullInt += fuller;
                     mealInt--;
                 }
             }
@@ -67,8 +68,13 @@ namespace dojodachi.Controllers
                     bool like = randy.Next(0, 4) != 0;
                     if(like)
                     {
-                        happInt += randy.Next(5, 11);
+                        happier = randy.Next(5, 11);
+                        message = "You played with your Dojodachi! Happiness +" + happier + ", Energy -5";
+                    } else 
+                    {
+                        message = "You tried to play with your Dojodachi, but it didn't like it. Energy -5";
                     }
+                    happInt += happier;
                     enerInt -= 5;
                 }
             }
@@ -76,8 +82,10 @@ namespace dojodachi.Controllers
             {
                 if(enerInt > 4)
                 {
-                    mealInt += randy.Next(1, 4);
+                    mealier = randy.Next(1, 4);
+                    mealInt += mealier;
                     enerInt -= 5;
+                    message = "Dojodachi worked. Meals +" + mealier + ", Energy -5";
                 }
             }
             else if(result == "Sleep") 
@@ -85,15 +93,13 @@ namespace dojodachi.Controllers
                 enerInt += 15;
                 fullInt -= 5;
                 happInt -= 5;
+                message = "Dojodachi slept. Energy +15, Fullness -5, Happiness -5";
             }
             HttpContext.Session.SetInt32("fullness", (int)fullInt);
             HttpContext.Session.SetInt32("happiness", (int)happInt);
             HttpContext.Session.SetInt32("meals", (int)mealInt);
             HttpContext.Session.SetInt32("energy", (int)enerInt);
-            // TempData["fullness"] = Convert.ToString(fullInt);
-            // TempData["happiness"] = Convert.ToString(happInt);
-            // TempData["meals"] = Convert.ToString(mealInt);
-            // TempData["energy"] = Convert.ToString(enerInt);
+            HttpContext.Session.SetString("message", message);
             return RedirectToAction("Dojodachi");
         }
     }
