@@ -28,6 +28,7 @@ namespace dojodachi
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+            services.AddSession();
             services.AddMvc();
         }
 
@@ -48,6 +49,7 @@ namespace dojodachi
             }
 
             app.UseStaticFiles();
+            app.UseSession();
             app.UseMvc();
 
             // app.UseMvc(routes =>
