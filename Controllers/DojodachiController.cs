@@ -14,18 +14,20 @@ namespace dojodachi.Controllers
         [Route("")]
         public IActionResult Dojodachi()
         {
-            if(HttpContext.Session.GetString("message") == null)
+            if(HttpContext.Session.GetInt32("message") == null)
             {
                 HttpContext.Session.SetInt32("fullness", 20);
                 HttpContext.Session.SetInt32("happiness", 20);
                 HttpContext.Session.SetInt32("meals", 3);
                 HttpContext.Session.SetInt32("energy", 50);
                 HttpContext.Session.SetString("message", "Welcome to DojoDachi!");
+                HttpContext.Session.SetInt32("playing", 1);
             }
                 ViewBag.fullness = HttpContext.Session.GetInt32("fullness");
                 ViewBag.happiness = HttpContext.Session.GetInt32("happiness");
                 ViewBag.meals = HttpContext.Session.GetInt32("meals");
                 ViewBag.energy = HttpContext.Session.GetInt32("energy");
+                ViewBag.playing = HttpContext.Session.GetInt32("playing");
                 ViewBag.message = HttpContext.Session.GetString("message");
             return View("dojodachi", ViewBag);
         }
@@ -41,7 +43,8 @@ namespace dojodachi.Controllers
             int fuller = 0;
             int happier = 0;
             int mealier = 0;
-            string message = "This is the test message";
+
+            string message = "Error: inform coder ASAP!";
             System.Console.WriteLine("{0} {1} {2} {3}", fullInt, happInt, mealInt, enerInt);
             if(result == "Feed")
             {
@@ -60,6 +63,10 @@ namespace dojodachi.Controllers
                     fullInt += fuller;
                     mealInt--;
                 }
+                else
+                {
+                    message = "No meals left. Work for more...";
+                }
             }
             else if(result == "Play")
             {
@@ -77,6 +84,9 @@ namespace dojodachi.Controllers
                     happInt += happier;
                     enerInt -= 5;
                 }
+                else{
+                    message = "Out of energy. Time to sleep?";
+                }
             }
             else if(result == "Work")
             {
@@ -87,6 +97,9 @@ namespace dojodachi.Controllers
                     enerInt -= 5;
                     message = "Dojodachi worked. Meals +" + mealier + ", Energy -5";
                 }
+                else{
+                    message = "Out of energy. Time to sleep?";
+                }
             }
             else if(result == "Sleep") 
             {
@@ -95,11 +108,31 @@ namespace dojodachi.Controllers
                 happInt -= 5;
                 message = "Dojodachi slept. Energy +15, Fullness -5, Happiness -5";
             }
-            HttpContext.Session.SetInt32("fullness", (int)fullInt);
-            HttpContext.Session.SetInt32("happiness", (int)happInt);
-            HttpContext.Session.SetInt32("meals", (int)mealInt);
-            HttpContext.Session.SetInt32("energy", (int)enerInt);
-            HttpContext.Session.SetString("message", message);
+            else if(result == "Restart?") 
+            {
+                HttpContext.Session.Clear();
+                return RedirectToAction("Dojodachi");
+            }
+
+            if(enerInt > 100 && fullInt > 100 && happInt > 100)
+            {
+                HttpContext.Session.SetInt32("playing", 0);
+                message = "Congratulations! You won!";
+            }
+            else if(fullInt <= 0 || happInt <= 0)
+            {
+                HttpContext.Session.SetInt32("playing", 0);
+                message = "Your Dojodachi has passed away.";
+            }
+            else 
+            {
+            }
+                System.Console.WriteLine("** {0} {1} {2} {3} **", fullInt, happInt, mealInt, enerInt);
+                HttpContext.Session.SetInt32("fullness", (int)fullInt);
+                HttpContext.Session.SetInt32("happiness", (int)happInt);
+                HttpContext.Session.SetInt32("meals", (int)mealInt);
+                HttpContext.Session.SetInt32("energy", (int)enerInt);
+                HttpContext.Session.SetString("message", message);
             return RedirectToAction("Dojodachi");
         }
     }

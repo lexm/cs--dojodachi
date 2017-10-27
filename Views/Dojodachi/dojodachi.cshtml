@@ -27,9 +27,16 @@
     </body>
     <form class="row" action="move" method="POST">
         <input type="hidden" >
-        <input class="col-md-3" type="submit" name="result" value="Feed">
-        <input class="col-md-3" type="submit" name="result" value="Play">
-        <input class="col-md-3" type="submit" name="result" value="Work">
-        <input class="col-md-3" type="submit" name="result" value="Sleep">
+        @if(@ViewBag.playing == 1)
+        {
+            <input class="col-md-3" type="submit" name="result" value="Feed">
+            <input class="col-md-3" type="submit" name="result" value="Play">
+            <input class="col-md-3" type="submit" name="result" value="Work">
+            <input class="col-md-3" type="submit" name="result" value="Sleep">
+        }
+        else
+        {
+            <input class="text-center" type="submit" name="result" value="Restart?">
+        }
     </form>
 </html>
